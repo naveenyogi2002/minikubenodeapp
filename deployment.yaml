@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yourapp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yourapp
+  template:
+    metadata:
+      labels:
+        app: yourapp
+    spec:
+      containers:
+      - name: yourapp
+        image: naveenyogi/nodeapp:latest
+        ports:
+        - containerPort: 3000
