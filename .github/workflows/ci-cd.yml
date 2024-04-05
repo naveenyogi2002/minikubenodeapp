@@ -73,6 +73,12 @@ jobs:
           kubectl get deployments
           kubectl get services
 
+      - name: Inspect Minikube Container
+        run: |
+          docker ps | grep minikube
+          docker inspect 737c097c4d7a  # Replace with your container ID
+          # You can add more commands to inspect the container as needed
+
       - name: Configure kubectl
         run: |
           kubectl config set-context minikube --cluster=minikube --user=minikube
