@@ -34,7 +34,7 @@ jobs:
       - name: Test Service URLs
         run: |
             minikube service list
-            minikube service nodeapp-service --url
+            minikube service nodejs-app --url
        
             
 
@@ -44,7 +44,7 @@ jobs:
 
 
 
-            
+
       # - name: Install dependencies  
       #   run: npm install
       
