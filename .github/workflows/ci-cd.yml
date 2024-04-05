@@ -92,9 +92,7 @@ jobs:
       
     - name: Install kubectl
       uses: azure/setup-kubectl@v1
-      with:
-        installKubectl: true
-        
+      
     - name: Configure kubectl
       run: |
         kubectl config use-context minikube
