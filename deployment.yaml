@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: yourapp-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: yourapp
@@ -17,3 +17,18 @@ spec:
         image: naveenyogi/nodeapp:latest
         ports:
         - containerPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: yourapp-service
+spec:
+  selector:
+    app: yourapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
