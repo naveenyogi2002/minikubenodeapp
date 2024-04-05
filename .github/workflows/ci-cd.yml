@@ -8,13 +8,57 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install dependencies  
+        run: npm install
+      
+      - name: Run tests
+        run: npm test
+      
       - name: Build Docker image
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          docker build -t cicd .
-          docker tag cicd naveenyogi/cicd:latest
-          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker push naveenyogi/cicd:latest
+          docker build -t naveenyogi/nodeapp:latest .
+          docker login -u naveenyogi -p $DOCKER_PASSWORD  
+          docker push naveenyogi/nodeapp:latest
+        
+  # deploy:
+  #   runs-on: ubuntu-latest
+    
+  #   needs: build
+    
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+      
+  #     - name: Install kubectl
+  #       uses: azure/setup-kubectl@v1
+
+  #     - name: Deploy to Minikube
+  #       run: |
+  #         # Check if Minikube is running
+  #         if minikube status | grep -q "host: Running"; then
+  #           echo "Minikube is running, deploying to it..."
+  #         else
+  #           echo "Minikube is not running, starting it..."
+  #           minikube start
+  #         fi
+        
+  #         # Deploy to Minikube
+  #         kubectl apply -f deployment.yaml --validate=false
+  #         kubectl apply -f service.yaml
+
+  #     - name: Port forward to local system
+  #       run: |
+  #         kubectl port-forward deployment/my-deployment 8080:8080 &
+  #         kubectl port-forward service/my-service 8081:80 &
+
+  #     - name: Configure kubectl
+  #       run: |
+  #         kubectl config set-context minikube --cluster=minikube --user=minikube
+  #         kubectl config use-context minikube
