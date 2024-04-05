@@ -5,6 +5,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 RUN npm install -g npm@v10.5.0
+RUN apt-get install nginx
 #332
 COPY . .
 
