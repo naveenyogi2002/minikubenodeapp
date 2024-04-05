@@ -5,7 +5,7 @@ const imagePath = '/home/naveenkumar/Downloads/depositphotos_67943363-stock-phot
 
 const server = http.createServer((req, res) => {
     // Check if the request path is for the root URL
-    if (req.url === '/') {
+    if (req.url === '/image') {
         // Read the image file
         fs.readFile(imagePath, (err, data) => {
             if (err) {
