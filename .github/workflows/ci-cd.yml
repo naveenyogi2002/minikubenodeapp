@@ -39,24 +39,39 @@ jobs:
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
 
-      - name: Deploy to Minikube
+        - name: Deploy to Minikube
         run: |
           # Check if Minikube is running
           if minikube status | grep -q "host: Running"; then
             echo "Minikube is running, deploying to it..."
           else
-            echo "Minikube is not running, starting it..."
-            minikube start
+            echo "Minikube is not running, please start it manually."
+            exit 1
           fi
-        
+      
           # Deploy to Minikube
+          echo "Deploying to Minikube..."
+          kubectl config use-context minikube
           kubectl apply -f deployment.yaml --validate=false
+          if [ $? -eq 0 ]; then
+            echo "Deployment succeeded."
+          else
+            echo "Deployment failed."
+            exit 1
+          fi
+      
           kubectl apply -f service.yaml
-
-      - name: Port forward to local system
-        run: |
-          kubectl port-forward deployment/my-deployment 8080:8080 &
-          kubectl port-forward service/my-service 8081:80 &
+          if [ $? -eq 0 ]; then
+            echo "Service application succeeded."
+          else
+            echo "Service application failed."
+            exit 1
+          fi
+      
+          # Print the status of the deployment and service
+          echo "Checking deployment and service status..."
+          kubectl get deployments
+          kubectl get services
 
       - name: Configure kubectl
         run: |
