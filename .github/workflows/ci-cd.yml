@@ -39,7 +39,7 @@ jobs:
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
 
-        - name: Deploy to Minikube
+      - name: Deploy to Minikube
         run: |
           # Check if Minikube is running
           if minikube status | grep -q "host: Running"; then
